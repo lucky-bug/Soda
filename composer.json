@@ -6,5 +6,10 @@
             "email": "ibrokhim.shokirov@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "Soda\\": "framework/"
+        }
+    },
     "require": {}
 }
