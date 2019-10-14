@@ -1,6 +1,6 @@
 <?php
 
-namespace Soda;
+namespace Soda\Core;
 
 class Registry
 {

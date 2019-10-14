@@ -1,6 +1,6 @@
 <?php
 
-namespace Soda;
+namespace Soda\Core;
 
 class Application
 {
@@ -15,7 +15,7 @@ class Application
 
     public function start()
     {
-        echo "Application started!";
+        echo 'Application started!';
 
         return $this;
     }
