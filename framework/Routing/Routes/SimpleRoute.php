@@ -6,8 +6,12 @@ use Soda\Helpers\ArrayHelpers;
 
 class SimpleRoute extends Route
 {
-    public function matches($url)
+    public function matches(string $url, string $method): bool
     {
+        if ($method != $this->getMethod()) {
+            return false;
+        }
+
         $pattern = $this->pattern;
 
         preg_match_all('#:([a-zA-Z0-9]+)#', $pattern, $keys);
@@ -15,7 +19,6 @@ class SimpleRoute extends Route
         if (count($keys) && count($keys[0]) && count($keys[1])) {
             $keys = $keys[1];
         } else {
-            // No path params
             return preg_match("#^{$pattern}$#", $url);
         }
 

@@ -4,25 +4,31 @@ namespace Soda\Routing\Routes;
 
 use Soda\Core\Base;
 
-class Route extends Base
+abstract class Route extends Base
 {
     /**
      * @getter
      * @setter
      */
-    protected $pattern;
+    protected $pattern = 'example/example';
+
+    /**
+     * @getter
+     * @setter
+     */
+    protected $method = 'GET';
     
     /**
      * @getter
      * @setter
      */
-    protected $controller;
+    protected $controller = 'example';
     
     /**
      * @getter
      * @setter
      */
-    protected $action;
+    protected $action = 'example';
     
     /**
      * @getter

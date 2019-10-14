@@ -2,8 +2,9 @@
 
 return [
     [
-        'pattern' => 'example/index/:id',
-        'controller' => \App\Controllers\ExampleController::class,
+        'pattern' => 'home/index',
+        'method' => 'GET',
+        'controller' => \App\Controllers\HomeController::class,
         'action' => 'index',
         'parameters' => [],
     ],

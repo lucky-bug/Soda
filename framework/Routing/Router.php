@@ -15,7 +15,7 @@ class Router extends Base
      * @getter
      * @setter
      */
-    protected $url;
+    protected $request;
 
     /**
      * @getter
@@ -104,13 +104,13 @@ class Router extends Base
 
     public function dispatch(): Response
     {
-        $url = $this->url;
+        $url = $this->request->url;
         $parameters = [];
-        $controller = 'example';
+        $controller = 'home';
         $action = 'index';
 
         foreach ($this->routes as $route) {
-            if ($route->matches($url)) {
+            if ($route->matches($url, $this->request->getMethod())) {
                 $controller = $route->controller;
                 $action = $route->action;
                 $parameters = $route->parameters;
@@ -134,6 +134,10 @@ class Router extends Base
             }
         }
 
-        return $this->pass($controller, $action, $parameters);
+        return $this->pass(
+            'App\\Controllers\\' . ucfirst($controller) . 'Controller',
+            strtolower($this->request->method) . ucfirst($action),
+            $parameters
+        );
     }
 }
