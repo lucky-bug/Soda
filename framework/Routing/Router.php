@@ -4,6 +4,8 @@ namespace Soda\Routing;
 
 use Soda\Core\Base;
 use Soda\Core\Registry;
+use Soda\Helpers\ArrayHelpers;
+use Soda\Http\Response;
 use Soda\Routing\Exception\ActionException;
 use Soda\Routing\Exception\ControllerException;
 
@@ -14,18 +16,18 @@ class Router extends Base
      * @setter
      */
     protected $url;
-    
+
     /**
      * @getter
      * @setter
      */
     protected $extension;
-    
+
     /**
      * @getter
      */
     protected $controller;
-    
+
     /**
      * @getter
      */
@@ -67,21 +69,22 @@ class Router extends Base
         return $list;
     }
 
-    protected function pass($controller, $action, $parameters)
+    protected function pass($controller, $action, $parameters): Response
     {
         $name = ucfirst($controller);
         $this->controller = $controller;
         $this->action = $action;
 
-        try {
-            $instance = new $name([
-                'parameters' => $parameters,
-            ]);
-
-            Registry::set('controller', $instance);
-        } catch(\Exception $e) {
+        if (!class_exists($name)) {
             throw new ControllerException("Controller {$name} not found!");
         }
+
+        $instance = new $name([
+            'parameters' => $parameters,
+            'request' => Registry::get('request'),
+        ]);
+
+        Registry::set('controller', $instance);
 
         if (!method_exists($instance, $action)) {
             throw new ActionException("Action {$action} not found!");
@@ -89,17 +92,17 @@ class Router extends Base
 
         // Todo: run middlewares
 
-        call_user_func_array([
-            $instance,
-            $action,
-        ], is_array($parameters) ? $parameters : []);
+        $response = call_user_func_array([$instance, $action], is_array($parameters) ? $parameters : []);
+        Registry::set('response', $response);
 
         // Todo: things after action
 
         Registry::erase('controller');
+        
+        return $response;
     }
 
-    public function dispatch()
+    public function dispatch(): Response
     {
         $url = $this->url;
         $parameters = [];
@@ -112,23 +115,25 @@ class Router extends Base
                 $action = $route->action;
                 $parameters = $route->parameters;
 
-                $this->pass($controller, $action, $parameters);
-
-                return;
+                return $this->pass($controller, $action, $parameters);
             }
         }
 
-        $parts = explode('/', trim($url, '/'));
-        
+        $parts = ArrayHelpers::clean(
+            ArrayHelpers::trim(
+                explode('/', trim($url, '/'))
+            )
+        );
+
         if (count($parts) > 0) {
             $controller = $parts[0];
-            
+
             if (count($parts) > 1) {
                 $action = $parts[1];
                 $parameters = array_slice($parts, 2);
             }
         }
 
-        $this->pass($controller, $action, $parameters);
+        return $this->pass($controller, $action, $parameters);
     }
 }

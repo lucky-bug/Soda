@@ -9,4 +9,10 @@ class Controller extends Base
      * @setter
      */
     protected $parameters;
+    
+    /**
+     * @getter
+     * @setter
+     */
+    protected $request;
 }
