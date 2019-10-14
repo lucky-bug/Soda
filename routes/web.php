@@ -8,4 +8,11 @@ return [
         'action' => 'index',
         'parameters' => [],
     ],
+    [
+        'pattern' => 'tasks/index',
+        'method' => 'GET',
+        'controller' => \App\Controllers\TasksController::class,
+        'action' => 'index',
+        'parameters' => [],
+    ],
 ];

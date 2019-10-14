@@ -5,11 +5,11 @@ namespace App\Controllers;
 use Soda\Controller\WebController;
 use Soda\Http\Response;
 
-class HomeController extends WebController
+class TasksController extends WebController
 {
     public function index()
     {
-        $content = resolve('viewEngine')->render('home.index');
+        $content = resolve('viewEngine')->render('tasks.index');
         return new Response($content);
     }
 }

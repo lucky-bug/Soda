@@ -12,11 +12,6 @@ use Soda\Helpers\StringHelpers;
 
 class Base
 {
-    /**
-     * @getter
-     */
-    protected $app;
-
     public function __construct($options = [])
     {
         foreach ($options as $key => $value) {
@@ -25,8 +20,6 @@ class Base
 
             $this->$method($value);
         }
-
-        $this->app = Registry::get('app');
     }
 
     public function __call($name, $arguments)

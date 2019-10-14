@@ -11,7 +11,7 @@ class WebController extends Base
      * @setter
      */
     protected $parameters;
-    
+
     /**
      * @getter
      * @setter
