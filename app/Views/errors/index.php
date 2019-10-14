@@ -14,15 +14,19 @@
 <div class="container">
     <div class="row">
         <div class="offset-md-2 col-md-8">
-            <div class="card my-3 shadow border-danger">
-                <div class="card-header font-weight-bolder alert-danger border-danger h5">
+            <div class="text-center">
+                <img src="favicon.ico" height="128"/>
+            </div>
+
+            <div class="card bg-dark text-light shadow my-3">
+                <div class="card-header font-weight-bolder">
                     [<?= $code ?>] <?= $class ?>
                 </div>
-                <div class="card-body font-weight-bold">
+                <div class="card-body font-weight-bold text-danger">
                     <p>
                         <?= $message ?>
                     </p>
-                    <pre class="small overflow-auto text-muted m-0" style="white-space: pre-wrap;"><?= $trace ?></pre>
+                    <pre class="small overflow-auto text-white m-0" style="white-space: pre-wrap;"><?= $trace ?></pre>
                 </div>
             </div>
         </div>
