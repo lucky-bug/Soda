@@ -19,4 +19,9 @@ class Application
 
         return $this;
     }
+
+    public function resolve($class, $default = null)
+    {
+        return Registry::get($class, $default);
+    }
 }

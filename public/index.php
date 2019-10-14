@@ -16,6 +16,9 @@ try {
     $debugger = new \Soda\Debug\Debugger();
     \Soda\Core\Registry::set('debugger', $debugger);
 
+    $session = new \Soda\Http\Session([]);
+    \Soda\Core\Registry::set('session', $session);
+
     $request = \Soda\Http\Request::fromGlobals();
     \Soda\Core\Registry::set('request', $request);
 

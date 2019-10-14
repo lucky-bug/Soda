@@ -2,13 +2,13 @@
 
 namespace App\Controllers;
 
-use Soda\Core\Controller;
+use Soda\Controller\WebController;
 use Soda\Http\Response;
 
-class ExampleController extends Controller
+class ExampleController extends WebController
 {
     public function index()
     {
-        return new Response('Index action from Example controller says ' . $this->parameters['id'] . '!');
+        return new Response('Welcome to Soda!');
     }
 }

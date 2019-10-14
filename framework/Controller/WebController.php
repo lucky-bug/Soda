@@ -1,8 +1,10 @@
 <?php
 
-namespace Soda\Core;
+namespace Soda\Controller;
 
-class Controller extends Base
+use Soda\Core\Base;
+
+class WebController extends Base
 {
     /**
      * @getter
