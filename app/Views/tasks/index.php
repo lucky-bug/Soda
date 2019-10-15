@@ -22,7 +22,7 @@
         <div class="col-lg-4">
             <div class="card my-3 shadow-sm">
                 <div class="card-body">
-                    <form action="/task/create" method="post">
+                    <form action="/tasks/create" method="post">
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" id="name" name="name" class="form-control"/>
@@ -57,7 +57,6 @@
                         </thead>
                         <tbody>
                         <?php
-                        var_dump($tasks);
                             foreach ($tasks as $task) {
                                 echo '<tr>';
                                 echo '<td>' . htmlspecialchars($task->getName()) . '</td>';
@@ -71,11 +70,11 @@
                     <hr/>
                     <div class="text-center">
                         <div class="btn-group shadow-sm">
-                            <a href="?page=prev" class="btn btn-light border">Previous</a>
-                            <a href="?page=1" class="btn btn-light border">1</a>
-                            <a href="?page=2" class="btn btn-light border">2</a>
-                            <a href="?page=3" class="btn btn-light border">3</a>
-                            <a href="?page=next" class="btn btn-light border">Next</a>
+                            <a href="?page=<?= $page - 1 ?>" class="btn btn-light border">Previous</a>
+                            <a href="?page=<?= $page ?>" class="btn btn-light border">
+                                <?= $page ?>
+                            </a>
+                            <a href="?page=<?= $page + 1 ?>" class="btn btn-light border">Next</a>
                         </div>
                     </div>
                 </div>

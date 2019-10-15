@@ -15,4 +15,11 @@ return [
         'action' => 'index',
         'parameters' => [],
     ],
+    [
+        'pattern' => 'tasks/create',
+        'method' => 'POST',
+        'controller' => \App\Controllers\TasksController::class,
+        'action' => 'create',
+        'parameters' => [],
+    ],
 ];

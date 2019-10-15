@@ -22,7 +22,7 @@ class Response extends Base
      * @getter
      * @setter
      */
-    protected $code = 200;
+    protected $status = 200;
     
     /**
      * @getter
@@ -30,16 +30,16 @@ class Response extends Base
      */
     protected $headers = [];
 
-    public function __construct($content = '', $code = 200, $headers = [])
+    public function __construct($content = '', $status = 200, $headers = [])
     {
         $this->content = $content;
-        $this->code = $code;
+        $this->status = $status;
         $this->headers = $headers;
     }
 
     public function send()
     {
-        http_response_code($this->code);
+        http_response_code($this->status);
 
         $this->sendHeaders();
         $this->sendContent();

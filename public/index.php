@@ -15,6 +15,18 @@ function resolve(string $key, $default = null) {
     return Soda\Core\Registry::get($key, $default);
 }
 
+function getSession(string $key, $default = null) {
+    $session = resolve('session');
+    
+    return $session->get($key, $default);
+}
+
+function setSession(string $key, $value) {
+    $session = resolve('session');
+
+    return $session->set($key, $value);
+}
+
 try {
     $app = new Soda\Core\Application('dev', true);
     Soda\Core\Registry::set('app', $app);

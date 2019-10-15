@@ -60,23 +60,26 @@ class Request extends Base
         ]);
     }
 
-    public function getQueryValue($fieldName)
+    public function getQueryValue(string $fieldName, $default = null)
     {
-        return $this->query[$fieldName];
+        return $this->query[$fieldName] ?? $default;
     }
 
-    public function getRequestValue($fieldName)
+    public function getRequestValue(string $fieldName, $default = null)
     {
-        return $this->request[$fieldName];
+        return $this->request[$fieldName] ?? $default;
     }
 
-    public function getServerValue($fieldName)
+    public function getServerValue(string $fieldName, $default = null)
     {
-        return $this->server[$fieldName];
+        return $this->server[$fieldName] ?? $default;
     }
 
-    public function get(string $fieldName) {
-        return $this->method === 'GET' ? $this->query[$fieldName] : $this->request[$fieldName];
+    public function get(string $fieldName, $default = null) {
+        return $this->method === 'GET'
+            ? ($this->query[$fieldName] ?? $default)
+            : ($this->request[$fieldName] ?? $default)
+        ;
     }
 
     public function validate(array $rules) {
