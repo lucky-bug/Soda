@@ -3,6 +3,7 @@
 namespace Soda\Controller;
 
 use Soda\Core\Base;
+use Soda\Http\Request;
 
 class WebController extends Base
 {
@@ -15,6 +16,7 @@ class WebController extends Base
     /**
      * @getter
      * @setter
+     * @var Request
      */
     protected $request;
 }

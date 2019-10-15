@@ -29,4 +29,16 @@ class Task extends Base
      * @setter
      */
     protected $text;
+
+    /**
+     * @getter
+     * @setter
+     */
+    protected $status = false;
+
+    /**
+     * @getter
+     * @setter
+     */
+    protected $edited = false;
 }

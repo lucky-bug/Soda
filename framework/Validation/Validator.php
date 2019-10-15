@@ -11,28 +11,28 @@ class Validator extends Base
      * @getter
      * @setter
      */
-    private $fields = [];
+    protected $fields = [];
     
     /**
      * @getter
      * @setter
      */
-    private $rules = [];
+    protected  $rules = [];
 
     /**
      * @getter
      */
-    private $validFields = [];
+    protected $validFields = [];
 
     /**
      * @getter
      */
-    private $errors = [];
+    protected $errors = [];
     
     /**
      * @getter
      */
-    private $valid = false;
+    protected $valid = false;
 
     public function validate(): bool
     {
@@ -56,55 +56,110 @@ class Validator extends Base
         foreach ($rules as $rule) {
             $ruleParts = explode(':', $rule);
             $name = $ruleParts[0] ?? '';
-            $value = trim($ruleParts[1]) ?? null;
+            $value = isset($ruleParts[1]) ? trim($ruleParts[1]) : null;
 
             switch ($name) {
                 case 'required':
-                    $valid &= isset($this->fields[$fieldName]);
-                    $this->addError($fieldName, 'This field is required!');
+                    $test = isset($this->fields[$fieldName]) && strlen($this->fields[$fieldName]) > 0;
+                    $valid &= $test;
+                    
+                    if (!$test) {
+                        $this->addError($fieldName, 'This field is required!');
+                    }
+                    
                     break;
                 case 'numeric':
-                    $valid &= is_numeric($this->fields[$fieldName]);
-                    $this->addError($fieldName, 'Must be numeric!');
+                    $test = is_numeric($this->fields[$fieldName]);
+                    $valid &= $test;
+                    
+                    if (!$test) {
+                        $this->addError($fieldName, 'Must be numeric!');
+                    }
+
                     break;
                 case 'min':
-                    $valid &= (is_numeric($this->fields[$fieldName]) && $this->fields[$fieldName] >= $value);
-                    $this->addError($fieldName, "Must be bigger than or equal to {$value}!");
+                    $test = (is_numeric($this->fields[$fieldName]) && $this->fields[$fieldName] >= $value);
+                    $valid &= $test;
+                    
+                    if (!$test) {
+                        $this->addError($fieldName, "Must be bigger than or equal to {$value}!");
+                    }
+
                     break;
                 case 'max':
-                    $valid &= (is_numeric($this->fields[$fieldName]) && $this->fields[$fieldName] <= $value);
-                    $this->addError($fieldName, "Must be less than or equal to {$value}!");
+                    $test = (is_numeric($this->fields[$fieldName]) && $this->fields[$fieldName] <= $value);
+                    $valid &= $test;
+                    
+                    if (!$test) {
+                        $this->addError($fieldName, "Must be less than or equal to {$value}!");
+                    }
+
                     break;
                 case 'int':
                 case 'integer':
-                    $valid &= filter_var($this->fields[$fieldName], FILTER_VALIDATE_INT) !== false;
-                    $this->addError($fieldName, 'Must be integer!');
+                    $test = filter_var($this->fields[$fieldName], FILTER_VALIDATE_INT) !== false;
+                    $valid &= $test;
+                    
+                    if (!$test) {
+                        $this->addError($fieldName, 'Must be integer!');
+                    }
+
                     break;
                 case 'bool':
                 case 'boolean':
-                    $valid &= filter_var($this->fields[$fieldName], FILTER_VALIDATE_BOOLEAN | FILTER_NULL_ON_FAILURE) !== null;
-                    $this->addError($fieldName, 'Must be boolean!');
+                    $test = filter_var($this->fields[$fieldName], FILTER_VALIDATE_BOOLEAN | FILTER_NULL_ON_FAILURE) !== null;
+                    $valid &= $test;
+                    
+                    if (!$test) {
+                        $this->addError($fieldName, 'Must be boolean!');
+                    }
+
                     break;
                 case 'email':
-                    $valid &= filter_var($this->fields[$fieldName], FILTER_VALIDATE_EMAIL) !== false;
-                    $this->addError($fieldName, 'Must be an email!');
+                    $test = filter_var($this->fields[$fieldName], FILTER_VALIDATE_EMAIL) !== false;
+                    $valid &= $test;
+                    
+                    if (!$test) {
+                        $this->addError($fieldName, 'Must be an email!');
+                    }
+
                     break;
                 case 'str':
                 case 'string':
-                    $valid &= is_string($this->fields[$fieldName]);
-                    $this->addError($fieldName, 'Must be a string!');
+                    $test = is_string($this->fields[$fieldName]);
+                    $valid &= $test;
+                    
+                    if (!$test) {
+                        $this->addError($fieldName, 'Must be a string!');
+                    }
+
                     break;
                 case 'length':
-                    $valid &= (strlen($this->fields[$fieldName]) == $value);
-                    $this->addError($fieldName, "Must be {$value} characters long!");
+                    $test = (strlen($this->fields[$fieldName]) == $value);
+                    $valid &= $test;
+                    
+                    if (!$test) {
+                        $this->addError($fieldName, "Must be {$value} characters long!");
+                    }
+
                     break;
                 case 'min-length':
-                    $valid &= (strlen($this->fields[$fieldName]) >= $value);
-                    $this->addError($fieldName, "Must have at least {$value} characters!");
+                    $test = (strlen($this->fields[$fieldName]) >= $value);
+                    $valid &= $test;
+                    
+                    if (!$test) {
+                        $this->addError($fieldName, "Must have at least {$value} characters!");
+                    }
+
                     break;
                 case 'max-length':
-                    $valid &= (strlen($this->fields[$fieldName]) <= $value);
-                    $this->addError($fieldName, "Must have at most {$value} characters!");
+                    $test = (strlen($this->fields[$fieldName]) <= $value);
+                    $valid &= $test;
+                    
+                    if (!$test) {
+                        $this->addError($fieldName, "Must have at most {$value} characters!");
+                    }
+
                     break;
                 default:
                     throw new ValidationException('Invalid validation rule!');

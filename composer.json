@@ -12,5 +12,7 @@
             "Soda\\": "framework/"
         }
     },
-    "require": {}
+    "require": {
+      "ext-mysqli": "*"
+    }
 }

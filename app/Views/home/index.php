@@ -11,11 +11,9 @@
 </head>
 <body>
 
-<nav class="navbar navbar-light bg-white border-bottom shadow-sm">
-    <div class="container">
-        <a class="navbar-brand">Soda</a>
-    </div>
-</nav>
+<?php
+include VIEWS_DIR . 'layout/navbar.php';
+?>
 
 <div class="container">
     <div class="row">

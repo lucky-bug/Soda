@@ -34,6 +34,13 @@ class Session extends Base
         
         return $this;
     }
+
+    public function renew(bool $deleteOld = false)
+    {
+        session_regenerate_id($deleteOld);
+
+        return $this;
+    }
     
     public function __destruct()
     {

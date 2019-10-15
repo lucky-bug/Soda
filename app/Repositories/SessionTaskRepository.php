@@ -12,7 +12,7 @@ class SessionTaskRepository extends Base implements TaskRepository
         return getSession('tasks', []);
     }
 
-    public function getById(string $id): ?Task
+    public function getById(int $id): ?Task
     {
         $tasks = $this->getAll();
 
@@ -35,10 +35,10 @@ class SessionTaskRepository extends Base implements TaskRepository
         setSession('tasks', $tasks);
     }
 
-    public function delete(Task $task)
+    public function deleteById(int $id)
     {
         $tasks = $this->getAll();
-        unset($tasks[$task->getId()]);
+        unset($tasks[$id]);
 
         setSession('tasks', $tasks);
     }

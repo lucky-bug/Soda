@@ -11,57 +11,69 @@
 </head>
 <body>
 
-<nav class="navbar navbar-light bg-white border-bottom shadow-sm">
-    <div class="container">
-        <a class="navbar-brand">Soda</a>
-    </div>
-</nav>
+<?php
+include VIEWS_DIR . 'layout/navbar.php';
+?>
 
 <div class="container">
     <div class="row">
-        <div class="col-lg-4">
-            <div class="card my-3 shadow-sm">
-                <div class="card-body">
-                    <form action="/tasks/create" method="post">
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" id="name" name="name" class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">E-Mail</label>
-                            <input type="email" id="email" name="email" class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="text">Text</label>
-                            <input type="text" id="text" name="text" class="form-control"/>
-                        </div>
-                        <hr/>
-                        <div>
-                            <input type="submit" value="Create Task" class="btn btn-block btn-primary"/>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-8">
+        <div class="col-12">
             <div class="card shadow-sm my-3">
-                <div class="card-body">
+                <div class="card-body table-responsive">
                     <table class="table table-striped table-bordered table-hover m-0">
                         <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>E-Mail</th>
-                            <th>Text</th>
+                            <th>
+                                <a href="<?= url(
+                                        '/tasks/index', [
+                                            'sortBy' => 'name',
+                                            'order' => !isset($_GET['order']) || $_GET['order'] == 'asc' ? 'desc' : 'asc',
+                                        ], true) ?>">Name</a>
+                            </th>
+                            <th>
+                                <a href="<?= url('/tasks/index', [
+                                        'sortBy' => 'email',
+                                    'order' => !isset($_GET['order']) || $_GET['order'] == 'asc' ? 'desc' : 'asc',
+                                ], true) ?>">E-Mail</a>
+                            </th>
+                            <th>
+                                Text
+                            </th>
+                            <th>
+                                <a href="<?= url('/tasks/index', [
+                                        'sortBy' => 'status',
+                                    'order' => !isset($_GET['order']) || $_GET['order'] == 'asc' ? 'desc' : 'asc',
+                                ], true) ?>">Status</a>
+                            </th>
+                            <?php
+                            if (authenticated()) {
+                                echo '<th>Operation</th>';
+                            }
+                            ?>
                         </tr>
                         </thead>
                         <tbody>
                         <?php
-                            foreach ($tasks as $task) {
-                                echo '<tr>';
-                                echo '<td>' . htmlspecialchars($task->getName()) . '</td>';
-                                echo '<td>' . htmlspecialchars($task->getEmail()) . '</td>';
-                                echo '<td>' . htmlspecialchars($task->getText()) . '</td>';
+                            foreach ($tasks as $task) { ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($task->getName()) ?></td>
+                                    <td><?= htmlspecialchars($task->getEmail()) ?></td>
+                                    <td><?= htmlspecialchars($task->getText()) ?></td>
+                                    <td>
+                                        <div><?= $task->getStatus() ? 'Finished' : 'Not Finished' ?></div>
+                                        <div><?= $task->getEdited() ? 'Edited by Administrator' : '' ?></div>
+                                    </td>
+                                <?php if (authenticated()) { ?>
+                                    <td>
+                                        <form action="<?= url('/tasks/delete') ?>" method="post" id="deleleForm<?= $task->getId() ?>">
+                                            <input type='hidden' name='id' value='<?= $task->getId() ?>'>
+                                        </form>
+                                        <input type="submit" class="btn btn-sm btn-danger" value="Delete" form="deleleForm<?= $task->getId() ?>"/>
+                                        <a href="<?= url('/tasks/edit/' . $task->getId()) ?>" class="btn btn-sm btn-outline-success">
+                                            Edit
+                                        </a>
+                                    </td>
+                                <?php }
                                 echo '</tr>';
                             }
                         ?>
@@ -70,11 +82,11 @@
                     <hr/>
                     <div class="text-center">
                         <div class="btn-group shadow-sm">
-                            <a href="?page=<?= $page - 1 ?>" class="btn btn-light border">Previous</a>
-                            <a href="?page=<?= $page ?>" class="btn btn-light border">
+                            <a href="<?= url('tasks/index', ['page' => $page - 1], true) ?>" class="btn btn-light border <?= $hasPrevPage ? '' : 'disabled' ?>">Previous</a>
+                            <a href="<?= url('tasks/index', ['page' => $page], true) ?>" class="btn btn-light border">
                                 <?= $page ?>
                             </a>
-                            <a href="?page=<?= $page + 1 ?>" class="btn btn-light border">Next</a>
+                            <a href="<?= url('tasks/index', ['page' => $page + 1], true) ?>" class="btn btn-light border <?= $hasNextPage ? '' : 'disabled' ?>">Next</a>
                         </div>
                     </div>
                 </div>

@@ -10,21 +10,47 @@ class Pagination extends Base
      * @getter
      * @setter
      */
-    protected $page = 1;
+    protected $page;
 
     /**
      * @getter
      * @setter
      */
-    protected $pageLimit = 3;
+    protected $totalPages;
 
     /**
      * @getter
      * @setter
      */
-    protected $data = [];
+    protected $pageLimit;
 
-    public function getCurrentPage() {
+    /**
+     * @getter
+     * @setter
+     */
+    protected $data;
+
+    public function __construct($options = [])
+    {
+        $this->page = 1;
+        $this->pageLimit = 3;
+        $this->data = [];
+        parent::__construct($options);
+        $this->totalPages = (int)((count($this->data) + $this->pageLimit -1) / $this->pageLimit);
+    }
+
+    public function getCurrentPage()
+    {
         return array_splice($this->data, ($this->page - 1) * $this->pageLimit, $this->pageLimit);
+    }
+
+    public function hasNext()
+    {
+        return $this->page < $this->totalPages;
+    }
+
+    public function hasPrev()
+    {
+        return $this->page > 1;
     }
 }

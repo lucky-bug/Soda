@@ -49,6 +49,18 @@ class Request extends Base
      */
     protected $server;
 
+    /**
+     * @getter
+     * @setter
+     */
+    protected $validator;
+
+    public function __construct($options = [])
+    {
+        $this->validator = new Validator();
+        parent::__construct($options);
+    }
+
     public static function fromGlobals()
     {
         return new static([
@@ -84,11 +96,9 @@ class Request extends Base
 
     public function validate(array $rules) {
         $data = $this->method === 'GET' ? $this->query : $this->request;
-        $validator = new Validator([
-            'data' => $data,
-            'rules' => $rules,
-        ]);
+        $this->validator->fields = $data;
+        $this->validator->rules = $rules;
 
-        return $validator->validate();
+        return $this->validator->validate();
     }
 }

@@ -17,7 +17,7 @@ function resolve(string $key, $default = null) {
 
 function getSession(string $key, $default = null) {
     $session = resolve('session');
-    
+
     return $session->get($key, $default);
 }
 
@@ -25,6 +25,61 @@ function setSession(string $key, $value) {
     $session = resolve('session');
 
     return $session->set($key, $value);
+}
+
+function eraseSession(string $key) {
+    $session = resolve('session');
+
+    return $session->erase($key);
+}
+
+function renewSession(bool $deleteOld) {
+    $session = resolve('session');
+
+    return $session->renew($deleteOld);
+}
+
+function url(string $url, array $query = [], bool $sendOld = false) {
+    /**
+     * @var Soda\Http\Request $request
+     */
+    $request = resolve('request');
+    if ($request->get(Soda\Http\Request::QUERY_URL_PARAM)) {
+        $query[Soda\Http\Request::QUERY_URL_PARAM] = $url;
+        $url = '/';
+    }
+
+    $url = '/' . trim($url, '/');
+
+    if ($sendOld) {
+        $query = array_merge($_GET, $query);
+    }
+
+    if (count($query) == 0) {
+        return $url;
+    }
+
+    $queryString = implode('&', array_map(
+        function($value, $key) {
+            if(is_array($value)){
+                return $key.'[]='.implode('&'.$key.'[]=', $value);
+            }else{
+                return $key.'='.$value;
+            }
+        },
+        $query,
+        array_keys($query)
+    ));
+
+    return $url . '?' . $queryString;
+}
+
+function authenticated() {
+    return getSession('user') != null;
+}
+
+function getAuthUser() {
+    return getSession('user');
 }
 
 try {
@@ -48,13 +103,13 @@ try {
 
     if (file_exists(ROUTES_DIR . 'web.php')) {
         $webRoutes = include(ROUTES_DIR . 'web.php');
-        
+
         foreach ($webRoutes as $route) {
             $router->addRoute(new Soda\Routing\Routes\SimpleRoute($route));
         }
     }
 
-    $router->request = $request;
+    $router->setRequest($request);
 
     $response = $router->dispatch();
     $response->send();
